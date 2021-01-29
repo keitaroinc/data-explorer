@@ -24,7 +24,10 @@ export default async dpID => {
         return
       } else if (file.descriptor.api && file.descriptor.api.includes('datastore_search')) {
         // Datastore, e.g., when a path is a 'datastore_search' API
-        const response = await fetch(file.descriptor.api)
+        var headers = new Headers();
+        headers.append("Request-Source", "data-explorer");
+        
+        const response = await fetch(file.descriptor.api, { headers: headers })
         if (!response.ok) {
           file.descriptor.unavailable = true
           return
@@ -67,7 +70,9 @@ export default async dpID => {
         }
       } else if (file.descriptor.format.toLowerCase().includes('json')) {
         // Geographical data
-        const response = await fetch(file.descriptor.path)
+        const response = await fetch(file.descriptor.path, {
+          headers: { 'User-Agent': 'data-explorer/next-gen (API call for preview)' }
+        })
         if (!response.ok) {
           file.descriptor.unavailable = true
           return
