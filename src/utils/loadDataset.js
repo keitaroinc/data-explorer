@@ -70,9 +70,12 @@ export default async dpID => {
         }
       } else if (file.descriptor.format.toLowerCase().includes('json')) {
         // Geographical data
+        var headers = new Headers();
+        headers.append("Request-Source", "data-explorer");
         const response = await fetch(file.descriptor.path, {
-          headers: { 'User-Agent': 'data-explorer/next-gen (API call for preview)' }
+          headers: headers
         })
+        
         if (!response.ok) {
           file.descriptor.unavailable = true
           return
